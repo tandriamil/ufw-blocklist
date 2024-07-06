@@ -28,7 +28,9 @@ export ipsetname=ufw-blocklist-ipsum
 # seed file containing the list of IP addresses to be blocked, one per line
 # curl -sS -f --compressed 'https://raw.githubusercontent.com/stamparm/ipsum/master/levels/4.txt' > /etc/ipsum.4.txt
 # ipset is updated daily by /etc/cron.daily/ufw-blocklist-ipsum
-export seedlist=/etc/ipsum.4.txt
+
+# NOTE Custom edit: use the first level
+export seedlist=/etc/ipsum.1.txt
 
 export IPSET_EXE="/sbin/ipset"
 # check ipset exists and is executable
@@ -40,8 +42,8 @@ export IPSET_EXE="/sbin/ipset"
 
 # Function to check if a chain exists (chain_exists ufw_blocklist_input && action if true || action if false)
 chain_exists()
-{   
-    [ $# -lt 1 -o $# -gt 2 ] && { 
+{
+    [ $# -lt 1 -o $# -gt 2 ] && {
         echo "Usage: chain_exists <chain_name> [table]" >&2
         return 1
     }
@@ -52,8 +54,8 @@ chain_exists()
 
 # Function to check if an set exists (set_exists setname && action if true || action if false)
 set_exists()
-{   
-    [ $# -ne 1 ] && { 
+{
+    [ $# -ne 1 ] && {
         echo "Usage: set_exists <set_name>" >&2
         return 1
     }
@@ -72,7 +74,7 @@ start)
     # create an empty ipset
     $IPSET_EXE create  $ipsetname hash:net -exist
     $IPSET_EXE flush   $ipsetname
-    
+
     ## Insert firewall rules to take precedence, removing them and adding them back if they already existed
     # Block inbound to localhost from blocklist
     if chain_exists ufw-blocklist-input; then

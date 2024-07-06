@@ -11,7 +11,10 @@
 # install this file into /etc/cron.daily/ufw-blocklist-ipsum
 
 ## URL must return a text file with one IP address per line
-ipsumurl='https://raw.githubusercontent.com/stamparm/ipsum/master/levels/3.txt'
+
+# NOTE Custom: use the first level
+ipsumurl='https://raw.githubusercontent.com/stamparm/ipsum/master/levels/1.txt'
+
 # reject the new list if there are fewer than minlen number of ip addresses
 minlen=1000
 
